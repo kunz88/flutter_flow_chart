@@ -147,6 +147,8 @@ class _ElementHandler extends StatelessWidget {
         alignment = Alignment.centerLeft;
       case Handler.rightCenter:
         alignment = Alignment.centerRight;
+      case Handler.topLeft:
+        alignment = Alignment.topLeft;
     }
 
     var tapDown = Offset.zero;

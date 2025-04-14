@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class GridBackgroundParams extends ChangeNotifier {
   /// [gridSquare] is the raw size of the grid square when scale is 1
   GridBackgroundParams({
-    double gridSquare = 20.0,
+    double gridSquare = 16.0,
     this.gridThickness = 0.7,
     this.secondarySquareStep = 5,
     this.backgroundColor = Colors.white,
@@ -139,7 +139,7 @@ class GridBackground extends StatelessWidget {
   }
 }
 
-class _GridBackgroundPainter extends CustomPainter {
+/* class _GridBackgroundPainter extends CustomPainter {
   _GridBackgroundPainter({
     required this.params,
     required this.dx,
@@ -202,5 +202,75 @@ class _GridBackgroundPainter extends CustomPainter {
   bool shouldRepaint(_GridBackgroundPainter oldDelegate) {
     debugPrint('shouldRepaint ${oldDelegate.dx} $dx ${oldDelegate.dy} $dy');
     return oldDelegate.dx != dx || oldDelegate.dy != dy;
+  }
+}
+ */
+class _GridBackgroundPainter extends CustomPainter {
+  // offset verticale della griglia
+
+  _GridBackgroundPainter({
+    required this.params,
+    required this.dx,
+    required this.dy,
+  });
+  final GridBackgroundParams params;
+  final double
+      dx;
+  final double dy;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Disegna lo sfondo
+    final backgroundPaint = Paint()..color = params.backgroundColor;
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      backgroundPaint,
+    );
+
+    // Imposta il paint per i punti della griglia
+    final dotPaint = Paint()
+      ..color = params.gridColor
+      ..style = PaintingStyle.fill;
+
+    // Definisci il raggio dei punti; lo puoi rendere proporzionale a gridThickness o a tuo piacimento
+    final dotRadius = params.gridThickness * 1.5;
+
+    // Calcola il punto di partenza.
+    // Usando l'offset, otteniamo la posizione del primo punto in vista.
+    // Se dx o dy sono diversi da zero, la griglia si sposta.
+    // Prendiamo il modulo rispetto alla dimensione della cella per posizionare correttamente il primo punto.
+    final modX = dx % params.gridSquare;
+    final modY = dy % params.gridSquare;
+
+    // Il primo punto visibile (in alto a sinistra) sarà spostato di -modX e -modY.
+    final startX = -modX;
+    final startY = -modY;
+
+    // Calcoliamo quante colonne e righe sono necessarie per coprire l'intera area
+    final columns = (size.width / params.gridSquare).ceil() + 1;
+    final rows = (size.height / params.gridSquare).ceil() + 1;
+
+    // Disegna un cerchio per ogni intersezione della griglia.
+    for (var col = 0; col <= columns; col++) {
+      for (var row = 0; row <= rows; row++) {
+        final x = startX + col * params.gridSquare;
+        final y = startY + row * params.gridSquare;
+
+        // Facoltativo: disegna il punto solo se si trova (anche parzialmente) all'interno dell'area visibile
+        if (x >= -dotRadius &&
+            x <= size.width + dotRadius &&
+            y >= -dotRadius &&
+            y <= size.height + dotRadius) {
+          canvas.drawCircle(Offset(x, y), dotRadius, dotPaint);
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _GridBackgroundPainter oldDelegate) {
+    return oldDelegate.dx != dx ||
+        oldDelegate.dy != dy ||
+        oldDelegate.params != params;
   }
 }

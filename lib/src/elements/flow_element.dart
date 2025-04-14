@@ -31,6 +31,9 @@ enum ElementKind {
 
   ///
   image,
+
+  ///
+  card
 }
 
 /// Handler supported by elements
@@ -45,7 +48,10 @@ enum Handler {
   rightCenter,
 
   ///
-  leftCenter;
+  leftCenter,
+
+  ///
+  topLeft;
 
   /// Convert to [Alignment]
   Alignment toAlignment() {
@@ -58,6 +64,8 @@ enum Handler {
         return Alignment.centerRight;
       case Handler.leftCenter:
         return Alignment.centerLeft;
+      case Handler.topLeft:
+        return Alignment.topLeft;
     }
   }
 }

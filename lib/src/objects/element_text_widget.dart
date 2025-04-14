@@ -4,10 +4,7 @@ import 'package:flutter_flow_chart/flutter_flow_chart.dart';
 /// Common widget for the element text
 class ElementTextWidget extends StatefulWidget {
   ///
-  const ElementTextWidget({
-    required this.element,
-    super.key,
-  });
+  const ElementTextWidget({required this.element, super.key});
 
   ///
   final FlowElement element;
@@ -38,20 +35,21 @@ class _ElementTextWidgetState extends State<ElementTextWidget> {
     );
 
     return Align(
-      child: widget.element.isEditingText
-          ? TextFormField(
-              controller: _controller,
-              autofocus: true,
-              onTapOutside: (event) => dismissTextEditor(),
-              onFieldSubmitted: dismissTextEditor,
-              textAlign: TextAlign.center,
-              style: textStyle,
-            )
-          : Text(
-              widget.element.text,
-              textAlign: TextAlign.center,
-              style: textStyle,
-            ),
+      child:
+          widget.element.isEditingText
+              ? TextFormField(
+                controller: _controller,
+                autofocus: true,
+                onTapOutside: (event) => dismissTextEditor(),
+                onFieldSubmitted: dismissTextEditor,
+                textAlign: TextAlign.center,
+                style: textStyle,
+              )
+              : Text(
+                widget.element.text,
+                textAlign: TextAlign.center,
+                style: textStyle,
+              ),
     );
   }
 

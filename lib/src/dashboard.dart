@@ -309,6 +309,8 @@ class Dashboard extends ChangeNotifier {
         alignment = Alignment.centerLeft;
       case Handler.rightCenter:
         alignment = Alignment.centerRight;
+      case Handler.topLeft:
+        alignment = Alignment.topLeft;
     }
 
     var isSrc = false;
@@ -356,6 +358,8 @@ class Dashboard extends ChangeNotifier {
         alignment = Alignment.centerLeft;
       case Handler.rightCenter:
         alignment = Alignment.centerRight;
+      case Handler.topLeft:
+        alignment = Alignment.topLeft;
     }
 
     ConnectionParams? conn;
