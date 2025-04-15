@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_flow_chart/flutter_flow_chart.dart';
 import 'package:flutter_flow_chart/src/ui/segment_handler.dart';
@@ -313,7 +314,7 @@ class ArrowPainter extends CustomPainter {
       drawRectangularLine(canvas, paint);
     }
 
-    canvas.drawCircle(to, params.headRadius, paint);
+    drawArrowHead(canvas, from, to, color: params.color);
 
     paint
       ..color = params.color
@@ -349,15 +350,18 @@ class ArrowPainter extends CustomPainter {
 
   /// Draw a rectangular line
   void drawRectangularLine(Canvas canvas, Paint paint) {
+    final pivotX = (from.dx + to.dx) / 2;
+
     // calculating offsetted pivot
-    var pivot1 = Offset(from.dx, from.dy);
+    var pivot1 = Offset(pivotX, from.dy);
+
     if (params.startArrowPosition.y == 1) {
-      pivot1 = Offset(from.dx, from.dy + params.tailLength);
+      pivot1 = Offset(pivotX, from.dy + params.tailLength);
     } else if (params.startArrowPosition.y == -1) {
-      pivot1 = Offset(from.dx, from.dy - params.tailLength);
+      pivot1 = Offset(pivotX, from.dy - params.tailLength);
     }
 
-    final pivot2 = Offset(to.dx, pivot1.dy);
+    final pivot2 = Offset(pivotX, to.dy);
 
     path
       ..moveTo(from.dx, from.dy)
@@ -366,7 +370,8 @@ class ArrowPainter extends CustomPainter {
       ..lineTo(to.dx, to.dy);
 
     lines.addAll([
-      [from, pivot2],
+      [from, pivot1],
+      [pivot1, pivot2],
       [pivot2, to],
     ]);
   }
@@ -421,6 +426,50 @@ class ArrowPainter extends CustomPainter {
       ..moveTo(p0.dx, p0.dy)
       ..conicTo(p1.dx, p1.dy, p2.dx, p2.dy, 1)
       ..conicTo(p3.dx, p3.dy, p4.dx, p4.dy, 1);
+  }
+
+  /// Draws the head of the arrow
+  /// of the element.
+  void drawArrowHead(
+    Canvas canvas,
+    Offset from,
+    Offset to, {
+    double tipLength = 10.0,
+    double tipWidth = 16.0,
+    Color color = const Color(0xFF000000),
+    double strokeWidth = 2.0,
+  }) {
+    // Determina la direzione in base alle coordinate x:
+    // se to.dx è maggiore di from.dx, la freccia punta a destra,
+    // altrimenti a sinistra.
+    final isRight = to.dx >= from.dx;
+    // La coordinata y per la testa è quella del punto "to"
+    final y = to.dy;
+
+    // Creiamo il Path che rappresenta il triangolo (testa della freccia)
+    final arrowPath = Path()
+      ..moveTo(to.dx, to.dy); // il vertice della freccia (punta)
+
+    if (isRight) {
+      // Partendo da 'to' (la punta), disegniamo due linee separate:
+      arrowPath
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx - tipLength, y - tipWidth / 2)
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx - tipLength, y + tipWidth / 2);
+    } else {
+      arrowPath
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx + tipLength, y - tipWidth / 2)
+        ..moveTo(to.dx, y)
+        ..lineTo(to.dx + tipLength, y + tipWidth / 2);
+    }
+    // Disegna la testa della freccia
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+    canvas.drawPath(arrowPath, paint);
   }
 
   @override

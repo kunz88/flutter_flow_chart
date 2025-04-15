@@ -25,8 +25,8 @@ class Dashboard extends ChangeNotifier {
   Dashboard({
     Offset? handlerFeedbackOffset,
     this.blockDefaultZoomGestures = false,
-    this.minimumZoomFactor = 0.25,
-    this.defaultArrowStyle = ArrowStyle.curve,
+    this.minimumZoomFactor = 0.6,
+    this.defaultArrowStyle = ArrowStyle.rectangular,
   })  : elements = [],
         _dashboardPosition = Offset.zero,
         dashboardSize = Size.zero,

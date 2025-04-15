@@ -139,7 +139,7 @@ class GridBackground extends StatelessWidget {
   }
 }
 
-/* class _GridBackgroundPainter extends CustomPainter {
+/* class _GridBackgroundPainter extends CustomPainter { 
   _GridBackgroundPainter({
     required this.params,
     required this.dx,
@@ -203,8 +203,8 @@ class GridBackground extends StatelessWidget {
     debugPrint('shouldRepaint ${oldDelegate.dx} $dx ${oldDelegate.dy} $dy');
     return oldDelegate.dx != dx || oldDelegate.dy != dy;
   }
-}
- */
+}*/
+
 class _GridBackgroundPainter extends CustomPainter {
   // offset verticale della griglia
 
@@ -214,8 +214,7 @@ class _GridBackgroundPainter extends CustomPainter {
     required this.dy,
   });
   final GridBackgroundParams params;
-  final double
-      dx;
+  final double dx;
   final double dy;
 
   @override
@@ -232,21 +231,25 @@ class _GridBackgroundPainter extends CustomPainter {
       ..color = params.gridColor
       ..style = PaintingStyle.fill;
 
-    // Definisci il raggio dei punti; lo puoi rendere proporzionale a gridThickness o a tuo piacimento
+    // Definisci il raggio dei punti; lo puoi rendere proporzionale
+    // a gridThickness o a tuo piacimento
     final dotRadius = params.gridThickness * 1.5;
 
     // Calcola il punto di partenza.
     // Usando l'offset, otteniamo la posizione del primo punto in vista.
     // Se dx o dy sono diversi da zero, la griglia si sposta.
-    // Prendiamo il modulo rispetto alla dimensione della cella per posizionare correttamente il primo punto.
+    // Prendiamo il modulo rispetto alla dimensione della cella per posizionare
+    // correttamente il primo punto.
     final modX = dx % params.gridSquare;
     final modY = dy % params.gridSquare;
 
-    // Il primo punto visibile (in alto a sinistra) sarà spostato di -modX e -modY.
+    // Il primo punto visibile (in alto a sinistra)
+    // sarà spostato di -modX e -modY.
     final startX = -modX;
     final startY = -modY;
 
-    // Calcoliamo quante colonne e righe sono necessarie per coprire l'intera area
+    // Calcoliamo quante colonne e righe 
+    //sono necessarie per coprire l'intera area
     final columns = (size.width / params.gridSquare).ceil() + 1;
     final rows = (size.height / params.gridSquare).ceil() + 1;
 
@@ -256,7 +259,8 @@ class _GridBackgroundPainter extends CustomPainter {
         final x = startX + col * params.gridSquare;
         final y = startY + row * params.gridSquare;
 
-        // Facoltativo: disegna il punto solo se si trova (anche parzialmente) all'interno dell'area visibile
+        // Facoltativo: disegna il punto solo se si trova 
+        //(anche parzialmente) all'interno dell'area visibile
         if (x >= -dotRadius &&
             x <= size.width + dotRadius &&
             y >= -dotRadius &&
